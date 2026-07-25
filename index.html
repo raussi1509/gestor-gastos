@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestor de Gastos</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Gestor de Gastos Personales</h1>
+    <p>Registra y organiza tus gastos diarios.</p>
+  </header>
+
+  <main class="contenedor">
+
+    <section>
+      <h2>Registrar gasto</h2>
+            
+      <form id="formularioGasto">
+        <div class="grupo-campo">
+          <label for="descripcion">Descripción</label>
+          <input id="descripcion" type="text" placeholder="Ejemplo: Compra del supermercado" required>
+        </div>
+        <div class="grupo-campo"> 
+          <label for="categoria">Caregoría</label>
+          <select id="categoria" required>
+            <option value="">Seleccione una categoría</option>
+            <option value="Alimentación">Alimentación</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Servicios">Servicios</option>
+            <option value="Salud">Salud</option>
+            <option value="Educación">Educación</option>
+            <option value="Entretenimiento">Entretenimiento</option>
+            <option value="Hogar">Hogar</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+        <div class="grupo-campo">
+          <label for="monto">Monto</label>
+          <input type="number" id="monto" placeholder="Ejemplo: 1250.50" min="0.01" step="0.01" required>
+        </div> 
+        <div class="grupo-campo">
+          <label for="fecha">Fecha</label>
+          <input type="date" id="fecha" required>
+        </div> 
+        <div class="grupo-campo">
+          <label for="metodoPago">Método de pago</label>
+          <select id="metodoPago" required>
+            <option value="">Seleccione un método</option>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta de débito">Tarjeta de débito</option>
+            <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+            <option value="Transferencia">Transferencia</option>
+            <option value="Otro">Otro</option>
+          </select>
+        </div> 
+        <div class="grupo-campo"> 
+          <label for="nota">Nota</label>
+          <textarea id="nota" rows="4" placeholder="Información adicional del gasto"></textarea>
+          
+        </div>
+      <button type="submit" id="botonRegistrar">Registrar gasto</button>
+      <p id="mensajeFormulario"></p>
+      </form>
+    </section>
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
