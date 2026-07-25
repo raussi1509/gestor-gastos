@@ -1,0 +1,79 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: whitesmoke;
+    color: black;    
+}
+
+header {
+    text-align: center;
+    background-color: white;
+    padding: 30px 20px;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 700px;
+    margin: 30px auto;
+}
+
+section {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+section h2 {
+    margin-bottom: 20px;
+}
+
+.grupo-campo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.grupo-campo label {
+    margin-bottom: 6px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid darkgrey;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: green;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: darkgreen;
+}
+
+#mensajeFormulario {
+    margin-top: 12px;
+    text-align: center;
+    font-weight: bold;
+}
