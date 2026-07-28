@@ -110,3 +110,12 @@ button:hover {
 .boton-editar:hover {
     background-color: #0d47a1;
 }
+
+.boton-eliminar {
+    margin-top: 8px;
+    background-color: red;
+}
+
+.boton-eliminar:hover {
+    background-color: darkred;
+}

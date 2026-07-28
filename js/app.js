@@ -33,7 +33,8 @@ function mostrarGastos() {
             <p><strong>Fecha:</strong> ${gasto.fecha}</p>
             <p><strong>Método de pago:</strong> ${gasto.metodoPago}</p>
             <p><strong>Nota:</strong> ${gasto.nota || 'Sin nota'}</p>
-            <button type="button" class="boton-editar" data-id="${gasto.id}">Editar</button>`
+            <button type="button" class="boton-editar" data-id="${gasto.id}">Editar</button>
+            <button type="button" class="boton-eliminar" data-id="${gasto.id}">Eliminar</button>`
 
             listaGastos.appendChild(tarjeta)
     }
@@ -45,6 +46,16 @@ function mostrarGastos() {
             const id = Number(boton.dataset.id)
 
             cargarGastoEnFormulario(id)            
+        })
+    }
+
+    const botonesEliminar = document.querySelectorAll ('.boton-eliminar')
+
+    for (const boton of botonesEliminar) {
+        boton.addEventListener('click', function () {
+            const id = Number(boton.dataset.id)
+
+            eliminarGasto(id)
         })
     }
 }
@@ -119,3 +130,26 @@ function cargarGastoEnFormulario(id) {
     })
 }
 
+function eliminarGasto(id) {
+    const confirmar = confirm ('¿Seguro que deseas eliminar este gasto?')
+
+    if (!confirmar) {
+        return
+    }
+
+    gastos = gastos.filter(function (gasto) {
+        return gasto.id !== id
+    })
+
+    if (idGastoEditar === id) {
+        idGastoEditar = null
+        formularioGasto.reset()
+        botonRegistrar.textContent = 'Registrar gasto'
+    }
+
+    localStorage.setItem ('gastos', JSON.stringify(gastos))
+
+    mostrarGastos()
+
+    mensajeFormulario.textContent = 'Gasto eliminado correctamente.'
+}
