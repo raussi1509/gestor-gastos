@@ -119,3 +119,16 @@ button:hover {
 .boton-eliminar:hover {
     background-color: darkred;
 }
+
+.contenedor-filtros {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 600px) {
+    .contenedor-filtros {
+        grid-template-columns: 1fr;
+    }
+}
