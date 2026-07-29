@@ -10,6 +10,10 @@ const listaGastos = document.getElementById('listaGastos')
 const botonRegistrar = document.getElementById('botonRegistrar')
 const buscarGasto = document.getElementById('buscarGasto')
 const filtroCategoria = document.getElementById('filtroCategoria')
+const totalGastado = document.getElementById('totalGastado')
+const cantidadGastos = document.getElementById('cantidadGastos')
+const promedioGastos = document.getElementById('promedioGastos')
+const gastoMasAlto = document.getElementById('gastoMasAlto')
 
 let gastos = JSON.parse(localStorage.getItem('gastos')) || []
 
@@ -98,11 +102,36 @@ formularioGasto.addEventListener('submit', function (e) {
     localStorage.setItem('gastos', JSON.stringify(gastos))
 
     filtrarGasto()
+    actualizarResumen()
 
     formularioGasto.reset()
 })
 
 filtrarGasto()
+actualizarResumen()
+
+function actualizarResumen() {
+    const total = gastos.reduce(function (acumulador, gasto) {
+        return acumulador + gasto.monto
+    }, 0)
+
+    const cantidad = gastos.length
+
+    const promedio = cantidad > 0
+        ? total / cantidad
+        : 0
+
+    const mayor = cantidad > 0
+        ? Math.max(...gastos.map(function (gasto) {
+            return gasto.monto
+        }))
+        : 0
+
+    totalGastado.textContent = `RD$${total.toFixed(2)}`
+    cantidadGastos.textContent = cantidad
+    promedioGastos.textContent = `RD$${promedio.toFixed(2)}`
+    gastoMasAlto.textContent = `RD$${mayor.toFixed(2)}`
+}
 
 function filtrarGasto() {
     const textoBusqueda = buscarGasto.value.trim().toLowerCase()
@@ -171,6 +200,7 @@ function eliminarGasto(id) {
     localStorage.setItem ('gastos', JSON.stringify(gastos))
 
     filtrarGasto()
+    actualizarResumen()
 
     mensajeFormulario.textContent = 'Gasto eliminado correctamente.'
 }
