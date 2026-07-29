@@ -8,20 +8,22 @@ const nota = document.getElementById('nota')
 const mensajeFormulario = document.getElementById('mensajeFormulario')
 const listaGastos = document.getElementById('listaGastos')
 const botonRegistrar = document.getElementById('botonRegistrar')
+const buscarGasto = document.getElementById('buscarGasto')
+const filtroCategoria = document.getElementById('filtroCategoria')
 
 let gastos = JSON.parse(localStorage.getItem('gastos')) || []
 
 let idGastoEditar = null
 
-function mostrarGastos() {
+function mostrarGastos(lista = gastos) {
     listaGastos.innerHTML = ''
 
-    if (gastos.length === 0) {
-        listaGastos.innerHTML = '<p>No hay gastos registrados.</p>'
+    if (lista.length === 0) {
+        listaGastos.innerHTML = '<p>No se encontraron gastos.</p>'
         return
     }
 
-    for (const gasto of gastos) {
+    for (const gasto of lista) {
         const tarjeta = document.createElement('article')
 
         tarjeta.classList.add('tarjeta-gasto')
@@ -95,12 +97,31 @@ formularioGasto.addEventListener('submit', function (e) {
 
     localStorage.setItem('gastos', JSON.stringify(gastos))
 
-    mostrarGastos()
+    filtrarGasto()
 
     formularioGasto.reset()
 })
 
-mostrarGastos()
+filtrarGasto()
+
+function filtrarGasto() {
+    const textoBusqueda = buscarGasto.value.trim().toLowerCase()
+    const categoriaSeleccionada = filtroCategoria.value
+
+    const gastosFiltrados = gastos.filter(function (gasto) {
+        const coincideDescripcion = gasto.descripcion
+            .toLowerCase()
+            .includes(textoBusqueda)
+
+        const coincideCategoria =
+            categoriaSeleccionada === '' ||
+            gasto.categoria === categoriaSeleccionada
+
+        return coincideDescripcion && coincideCategoria
+    })
+
+    mostrarGastos(gastosFiltrados)
+}
 
 function cargarGastoEnFormulario(id) {
     const gastoEncontrado = gastos.find(function (gasto) {
@@ -149,7 +170,11 @@ function eliminarGasto(id) {
 
     localStorage.setItem ('gastos', JSON.stringify(gastos))
 
-    mostrarGastos()
+    filtrarGasto()
 
     mensajeFormulario.textContent = 'Gasto eliminado correctamente.'
 }
+
+buscarGasto.addEventListener('input', filtrarGasto)
+
+filtroCategoria.addEventListener('change', filtrarGasto)

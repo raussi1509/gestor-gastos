@@ -68,6 +68,30 @@
     <section class="seccion-lista">
       <h2>Gastos registrados</h2>
 
+      <div class="contenedor-filtros">
+
+        <div class="grupo-campo">
+          <label for="buscarGasto">Buscar por descripción</label>
+          <input type="text" id="buscarGasto" placeholder="Ejemplo: supermercado">
+        </div>
+
+        <div class="grupo-campo">
+          <label for="filtroCategoria">Filtrar por categoría</label>
+
+          <select id="filtroCategoria">
+            <option value="">Todas las categorías</option>
+            <option value="Alimentación">Alimentación</option>
+            <option value="Transporte">Transporte</option>
+            <option value="Servicios">Servicios</option>
+            <option value="Salud">Salud</option>
+            <option value="Educación">Educación</option>
+            <option value="Entretenimiento">Entretenimiento</option>
+            <option value="Hogar">Hogar</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
+      </div>
+
       <div id="listaGastos">
         <p id="mensajeLista">No hay gastos registrados</p>
       </div>
