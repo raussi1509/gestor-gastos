@@ -91,7 +91,7 @@ button:hover {
     padding: 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #fafafa;
+    background-color: white
 }
 
 .tarjeta-gasto h3 {
@@ -131,4 +131,41 @@ button:hover {
     .contenedor-filtros {
         grid-template-columns: 1fr;
     }
+}
+
+.resumen-gastos {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.tarjeta-resumen {
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  text-align: center;
+}
+
+.tarjeta-resumen h3 {
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.tarjeta-resumen p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+@media (max-width: 800px) {
+  .resumen-gastos {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .resumen-gastos {
+    grid-template-columns: 1fr;
+  }
 }
