@@ -1,0 +1,29 @@
+POST http://localhost:3000/api/gastos
+Content-Type: application/json
+
+{
+  "descripcion": "Pago de internet",
+  "categoria": "Servicios",
+  "monto": 1800,
+  "fecha": "2026-07-29",
+  "metodoPago": "Transferencia",
+  "nota": "Factura mensual"
+}
+
+###
+
+PUT http://localhost:3000/api/gastos/1
+Content-Type: application/json
+
+{
+  "descripcion": "Pago de internet actualizado",
+  "categoria": "Servicios",
+  "monto": 2000,
+  "fecha": "2026-07-29",
+  "metodoPago": "Transferencia",
+  "nota": "Factura mensual actualizada"
+}
+
+###
+
+DELETE http://localhost:3000/api/gastos/1
