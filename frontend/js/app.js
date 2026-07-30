@@ -14,10 +14,43 @@ const totalGastado = document.getElementById('totalGastado')
 const cantidadGastos = document.getElementById('cantidadGastos')
 const promedioGastos = document.getElementById('promedioGastos')
 const gastoMasAlto = document.getElementById('gastoMasAlto')
+const API_URL = 'http://localhost:3000/api/gastos'
 
-let gastos = JSON.parse(localStorage.getItem('gastos')) || []
+let gastos = []
 
 let idGastoEditar = null
+
+async function cargarGastos() {
+    try {
+        const respuesta = await fetch(API_URL)
+
+        if (!respuesta.ok) {
+            throw new Error('No fue posible obtener los gastos.')
+        }
+
+        const datos = await respuesta.json()
+
+        gastos = datos.map(function (gasto) {
+            return {
+                id: Number(gasto.Id),
+                descripcion: gasto.Descripcion,
+                categoria: gasto.Categoria,
+                monto: Number(gasto.Monto),
+                fecha: gasto.Fecha.split('T')[0],
+                metodoPago: gasto.MetodoPago,
+                nota: gasto.Nota || ''
+            }
+        })
+
+        filtrarGasto()
+        actualizarResumen()
+    } catch (error) {
+        console.error(error)
+
+        listaGastos.innerHTML =
+            '<p>No fue posible cargar los gastos.</p>'
+    }
+}
 
 function mostrarGastos(lista = gastos) {
     listaGastos.innerHTML = ''
@@ -66,11 +99,10 @@ function mostrarGastos(lista = gastos) {
     }
 }
 
-formularioGasto.addEventListener('submit', function (e) {
+formularioGasto.addEventListener('submit', async function (e) {
     e.preventDefault()
 
-    const nuevoGasto = {
-        id: Date.now(),
+    const gastoFormulario = {
         descripcion: descripcion.value.trim(),
         categoria: categoria.value,
         monto: Number(monto.value),
@@ -79,36 +111,53 @@ formularioGasto.addEventListener('submit', function (e) {
         nota: nota.value.trim()
     }
 
-    if (idGastoEditar === null) {
-        gastos.push(nuevoGasto)
+    try {
+        let respuesta
 
-        mensajeFormulario.textContent = 'Gasto registrado correctamente.'
-    } else {
-        const posicion = gastos.findIndex (function (gasto) {
-            return gasto.id === idGastoEditar
-        })
-
-        if (posicion !== -1) {
-            nuevoGasto.id = idGastoEditar
-            gastos[posicion] = nuevoGasto
+        if (idGastoEditar === null) {
+            respuesta = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(gastoFormulario)
+            })
+        } else {
+            respuesta = await fetch(`${API_URL}/${idGastoEditar}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(gastoFormulario)
+            })
         }
 
-        mensajeFormulario.textContent = 'Gasto actualizado correctamente.'
+        if (!respuesta.ok) {
+            throw new Error('No fue posible guardar el gasto.')
+        }
 
-        idGastoEditar = null 
+        if (idGastoEditar === null) {
+            mensajeFormulario.textContent =
+                'Gasto registrado correctamente.'
+        } else {
+            mensajeFormulario.textContent =
+                'Gasto actualizado correctamente.'
+        }
+
+        idGastoEditar = null
         botonRegistrar.textContent = 'Registrar gasto'
+        formularioGasto.reset()
+
+        await cargarGastos()
+    } catch (error) {
+        console.error(error)
+
+        mensajeFormulario.textContent =
+            'Ocurrió un error al guardar el gasto.'
     }
-
-    localStorage.setItem('gastos', JSON.stringify(gastos))
-
-    filtrarGasto()
-    actualizarResumen()
-
-    formularioGasto.reset()
 })
 
-filtrarGasto()
-actualizarResumen()
+cargarGastos()
 
 function actualizarResumen() {
     const total = gastos.reduce(function (acumulador, gasto) {
@@ -180,29 +229,40 @@ function cargarGastoEnFormulario(id) {
     })
 }
 
-function eliminarGasto(id) {
-    const confirmar = confirm ('¿Seguro que deseas eliminar este gasto?')
+async function eliminarGasto(id) {
+    const confirmar = confirm(
+        '¿Seguro que deseas eliminar este gasto?'
+    )
 
     if (!confirmar) {
         return
     }
 
-    gastos = gastos.filter(function (gasto) {
-        return gasto.id !== id
-    })
+    try {
+        const respuesta = await fetch(`${API_URL}/${id}`, {
+            method: 'DELETE'
+        })
 
-    if (idGastoEditar === id) {
-        idGastoEditar = null
-        formularioGasto.reset()
-        botonRegistrar.textContent = 'Registrar gasto'
+        if (!respuesta.ok) {
+            throw new Error('No fue posible eliminar el gasto.')
+        }
+
+        if (idGastoEditar === id) {
+            idGastoEditar = null
+            formularioGasto.reset()
+            botonRegistrar.textContent = 'Registrar gasto'
+        }
+
+        mensajeFormulario.textContent =
+            'Gasto eliminado correctamente.'
+
+        await cargarGastos()
+    } catch (error) {
+        console.error(error)
+
+        mensajeFormulario.textContent =
+            'Ocurrió un error al eliminar el gasto.'
     }
-
-    localStorage.setItem ('gastos', JSON.stringify(gastos))
-
-    filtrarGasto()
-    actualizarResumen()
-
-    mensajeFormulario.textContent = 'Gasto eliminado correctamente.'
 }
 
 buscarGasto.addEventListener('input', filtrarGasto)
