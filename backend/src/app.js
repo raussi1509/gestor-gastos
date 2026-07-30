@@ -18,8 +18,6 @@ app.get('/', function (req, res) {
     })
 })
 
-conectarBaseDatos()
-
 const puerto = process.env.PORT || 3000
 
 async function iniciarServidor() {
